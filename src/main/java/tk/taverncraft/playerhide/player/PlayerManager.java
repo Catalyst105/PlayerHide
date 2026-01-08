@@ -278,6 +278,35 @@ public class PlayerManager {
             prefix = "item-toggled-on";
         }
 
+        ItemStack item = getItemByPrefix(prefix);
+
+        if (this.main.getConfig().getBoolean("disable-slot", false)) {
+
+            if (!hasToggleItemInInventory(player)) {
+                player.getInventory().addItem(item);
+            } else {
+
+                int toggleItemSlot = getToggleItemSlot(player);
+                player.getInventory().setItem(toggleItemSlot, item);
+
+            }
+
+        } else {
+            player.getInventory().setItem(this.main.getConfig().getInt(prefix + ".slot", 0), item);
+        }
+
+    }
+
+    /**
+     * Creates an ItemStack based on configuration values using the specified
+     * prefix.
+     *
+     * @param prefix The configuration prefix to use for item properties (e.g.,
+     *               "item" or "item-toggled-on")
+     * @return An ItemStack configured with material, name, lore, and enchantments
+     *         from the config
+     */
+    private ItemStack getItemByPrefix(String prefix) {
         String materialName = this.main.getConfig().getString(prefix + ".material", "STICK");
         Material material = Material.valueOf(materialName);
         ItemStack item = new ItemStack(material);
@@ -311,8 +340,69 @@ public class PlayerManager {
         }
 
         item.setItemMeta(meta);
+        return item;
+    }
 
-        player.getInventory().setItem(this.main.getConfig().getInt(prefix + ".slot", 0), item);
+    /**
+     * Checks if an ItemStack is the PlayerHide toggle item.
+     *
+     * @param item The ItemStack to check
+     * @return true if the item is the toggle item, false otherwise
+     */
+    private boolean isToggleItem(ItemStack item) {
+        ItemStack itemToggleOff = getItemByPrefix("item");
+        ItemStack itemToggleOn = getItemByPrefix("item-toggled-on");
+
+        if (item == null) {
+            return false;
+        }
+
+        if (item.isSimilar(itemToggleOn) || item.isSimilar(itemToggleOff)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Checks if the player has the toggle item in their inventory.
+     *
+     * @param player The player whose inventory to check
+     * @return true if the toggle item is present, false otherwise
+     */
+    private boolean hasToggleItemInInventory(Player player) {
+        ItemStack itemToggleOff = getItemByPrefix("item");
+        ItemStack itemToggleOn = getItemByPrefix("item-toggled-on");
+
+        if (player.getInventory().contains(itemToggleOff) || player.getInventory().contains(itemToggleOn)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Finds the slot of the toggle item in the player's inventory.
+     *
+     * @param player The player whose inventory to search
+     * @return The slot index of the toggle item (between 0 and 42),
+     *         or 0 by default if not found
+     */
+    private int getToggleItemSlot(Player player) {
+        int slotIndex = 0;
+
+        for (ItemStack inventoryItem : player.getInventory().getContents()) {
+            if (slotIndex >= 42) {
+                slotIndex = 0;
+                break;
+            } else {
+                if (inventoryItem != null && isToggleItem(inventoryItem)) {
+                    break;
+                }
+                slotIndex++;
+            }
+        }
+
+        return slotIndex;
     }
 }
-
