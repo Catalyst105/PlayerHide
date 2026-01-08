@@ -45,6 +45,10 @@ public class CommandParser implements CommandExecutor {
                 }
             }
 
+            if(chatCmd.equals("item")) {
+                return new ItemCommand(this.main).execute(sender, this.main);
+            }
+
             // command to view all commands
             if (chatCmd.equals("help")) {
                 return new HelpCommand(this.main).execute(sender, args);

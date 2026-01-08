@@ -12,6 +12,7 @@ invalid-command: '&cInvalid command, type &6/phide help&c!'
 invalid-syntax: '&cInvalid syntax, type &6/phide help&c!'
 no-permission: '&cYou do not have the permission to run this command!'
 player-not-exist: '&cThe player name you entered does not exist!' # %player%
+need-player: '&cYou need to be a player to do that.'
 
 # toggle messages
 toggle-self-success: '&aYour visibility of others has been toggled to: &b%state%' # %player%, %state%
@@ -33,4 +34,5 @@ help-body: |
   &a/phide toggle &b- toggle self visibility of other players
   &a/phide toggle <name> &b- toggle a specific player's visibility of other players
   &a/phide reload &b- reload the plugin
+  &a/phide item &b- add the toggle item in your inventory
 help-footer: '&6Type &e/phide help %page% &6to view next page' # %page% is the next page number

@@ -1,6 +1,7 @@
 package tk.taverncraft.playerhide.utils;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import tk.taverncraft.playerhide.Main;
 
@@ -45,5 +46,18 @@ public class ValidationManager {
             return false;
         }
         return true;
+    }
+
+        /**
+     * Validates if a sender is a player or not.
+     *
+     * @param sender the player executing the command
+     */
+    public boolean isPlayer(CommandSender sender){
+        if(sender instanceof Player){
+            return true;
+        } else {
+            return false;
+        }
     }
 }
